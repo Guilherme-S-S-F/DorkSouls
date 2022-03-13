@@ -68,7 +68,7 @@ public class AnimatorHandler : MonoBehaviour
         }
         #endregion
 
-        if (isSpriting)
+        if (isSpriting && verticalMovement !=0)
         {
             v = 2f;
             h = horizontalMovement;

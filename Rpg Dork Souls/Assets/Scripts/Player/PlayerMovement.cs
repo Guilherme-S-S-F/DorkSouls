@@ -67,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
         moveDirection += myTransform.forward * Mathf.Abs(inputHandler.horizontal); 
         
         moveDirection.Normalize();
+        moveDirection.y = 0;
 
         float speed = walkSpeed;
         if (playerController.sprintFlag)

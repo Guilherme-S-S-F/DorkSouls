@@ -30,10 +30,12 @@ public class PlayerController : MonoBehaviour
         playerMovement.HandleMovement(delta);
         cameraHandler.HandleCameraRotation();
 
+        isInteracting = animatorHandler.anim.GetBool("isInteracting");
         sprintFlag = false;
         rollFlag = false;
 
         isSpriting = inputHandler.b_input;
+        
 
         animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSpriting);
 
