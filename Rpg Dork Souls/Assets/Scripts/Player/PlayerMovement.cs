@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [Range(0.1f, 15f)][SerializeField] float speed = 5f;
+    [Range(0.1f, 15f)][SerializeField] float walkSpeed = 5f;
+    [Range(0.1f, 25f)][SerializeField] float sprintSpeed = 7f;
     [Range(0.1f, 20f)][SerializeField] float jumpHeight = 15f;
     [Range(0.1f, 60f)][SerializeField] float rotationSpeed = 30f;
     [Range(0.1f, 10.81f)][SerializeField] float gravity = 10.81f;
 
     public float Gravity { get { return gravity; } set { gravity = value; } }
-    public float Speed { get { return speed; } set { speed = value; } }
+    public float WalkSpeed { get { return walkSpeed; } set { walkSpeed = value; } }
+    public float SprintSpeed { get { return sprintSpeed; } set { sprintSpeed = value; } }
     public float JumpHeight { get { return jumpHeight; } set { jumpHeight = value; } }
     public float RotationSpeed { get { return rotationSpeed; } set { rotationSpeed = value; } }
 
@@ -58,12 +60,27 @@ public class PlayerMovement : MonoBehaviour
 
     public void HandleMovement(float delta)
     {
+        if (playerController.rollFlag)
+            return;
+
         moveDirection = myTransform.forward * Mathf.Abs(inputHandler.vertical);
         moveDirection += myTransform.forward * Mathf.Abs(inputHandler.horizontal); 
         
         moveDirection.Normalize();
 
-        characterController.Move(moveDirection * speed * delta);
+        float speed = walkSpeed;
+        if (playerController.sprintFlag)
+        {
+            speed = sprintSpeed;
+            playerController.isSpriting = true;
+            moveDirection *= speed;
+        }
+        else
+        {
+            moveDirection *= speed;
+        }
+
+        characterController.Move(moveDirection * delta);
 
         // Adds gravity to the character controller
         Vector3 AddGravity = Vector3.up * -gravity;

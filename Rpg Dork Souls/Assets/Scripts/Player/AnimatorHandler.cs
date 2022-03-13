@@ -8,15 +8,15 @@ public class AnimatorHandler : MonoBehaviour
     int vertical;
     int horizontal;
     public bool canRotate;
-
+    
     public void Initialize()
     {
         anim = GetComponent<Animator>();
         vertical = Animator.StringToHash("Vertical");
-        horizontal = Animator.StringToHash("Horizontal");
+        horizontal = Animator.StringToHash("Horizontal");        
     }
 
-    public void UpdateAnimatorValues(float verticalMovement, float horizontalMovement)
+    public void UpdateAnimatorValues(float verticalMovement, float horizontalMovement, bool isSpriting)
     {
         #region Vertical
         float v = 0;
@@ -28,7 +28,7 @@ public class AnimatorHandler : MonoBehaviour
         else if (verticalMovement > 0.55f)
         {
             v = 1f;
-        }
+        }        
         else if (verticalMovement < 0 && verticalMovement > -0.55f)
         {
             v = -0.5f;
@@ -67,6 +67,12 @@ public class AnimatorHandler : MonoBehaviour
             h = 0;
         }
         #endregion
+
+        if (isSpriting)
+        {
+            v = 2f;
+            h = horizontalMovement;
+        }
 
         anim.SetFloat(vertical, v, 0.1f, Time.deltaTime);
         anim.SetFloat(horizontal, h, 0.1f, Time.deltaTime);

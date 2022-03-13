@@ -8,6 +8,13 @@ public class PlayerController : MonoBehaviour
     PlayerMovement playerMovement;    
     AnimatorHandler animatorHandler;
     [SerializeField]CameraHandler cameraHandler;
+
+    [Header("Players Flags")]
+    public bool isInteracting;
+    public bool isSpriting;
+    public bool sprintFlag;
+    public bool rollFlag;
+
     private void Start()
     {
         inputHandler = GetComponent<InputHandler>();
@@ -23,7 +30,12 @@ public class PlayerController : MonoBehaviour
         playerMovement.HandleMovement(delta);
         cameraHandler.HandleCameraRotation();
 
-        animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0);
+        sprintFlag = false;
+        rollFlag = false;
+
+        isSpriting = inputHandler.b_input;
+
+        animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSpriting);
 
         if (animatorHandler.canRotate)
         {
