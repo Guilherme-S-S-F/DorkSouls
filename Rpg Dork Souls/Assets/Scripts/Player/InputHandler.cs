@@ -69,7 +69,7 @@ public class InputHandler : MonoBehaviour
             if(rollInputTimer > 0 && rollInputTimer < 0.5f)
             {
                 playerController.sprintFlag = false;
-                playerController.rollFlag = true;
+                playerController.dashFlag = true;
             }
             rollInputTimer = 0;
         }

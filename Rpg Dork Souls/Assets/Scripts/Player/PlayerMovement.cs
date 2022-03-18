@@ -9,9 +9,12 @@ public class PlayerMovement : MonoBehaviour
     [Range(0.1f, 20f)][SerializeField] float jumpHeight = 15f;
     [Range(0.1f, 60f)][SerializeField] float rotationSpeed = 30f;
     [Range(0.1f, 10.81f)][SerializeField] float gravity = 10.81f;
+    [Range(0.1f, 10f)][SerializeField] float rollTime = 0.25f;
+    [Range(0.1f, 20f)][SerializeField] float dashSpeed = 10f;
 
     public float Gravity { get { return gravity; } set { gravity = value; } }
     public float WalkSpeed { get { return walkSpeed; } set { walkSpeed = value; } }
+    public float DashSpeed { get { return dashSpeed; } set { dashSpeed = value; } }
     public float SprintSpeed { get { return sprintSpeed; } set { sprintSpeed = value; } }
     public float JumpHeight { get { return jumpHeight; } set { jumpHeight = value; } }
     public float RotationSpeed { get { return rotationSpeed; } set { rotationSpeed = value; } }
@@ -20,8 +23,11 @@ public class PlayerMovement : MonoBehaviour
 
     Transform cameraObject;
     Transform myTransform;
+    [SerializeField]Transform bodyTransform;
 
-    CharacterController characterController;
+    Animator anim;
+
+    public CharacterController characterController;
     PlayerController playerController;
     InputHandler inputHandler;
 
@@ -30,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         playerController = GetComponent<PlayerController>();
         inputHandler = GetComponent<InputHandler>();
+        anim = GetComponentInChildren<Animator>();
+        
         cameraObject = Camera.main.transform;
         myTransform = transform;
     }
@@ -57,10 +65,9 @@ public class PlayerMovement : MonoBehaviour
 
         myTransform.rotation = targetRotation;
     }
-
     public void HandleMovement(float delta)
     {
-        if (playerController.rollFlag)
+        if (playerController.dashFlag)
             return;
 
         moveDirection = myTransform.forward * Mathf.Abs(inputHandler.vertical);
@@ -86,6 +93,39 @@ public class PlayerMovement : MonoBehaviour
         // Adds gravity to the character controller
         Vector3 AddGravity = Vector3.up * -gravity;
         characterController.Move(AddGravity * delta);
+    }   
+    public void HandleRolling(float delta)
+    {
+        if (anim.GetBool("isInteracting"))
+            return;
+
+        if (!playerController.canDash)
+            return;
+
+
+        if (playerController.dashFlag && characterController.isGrounded && inputHandler.moveAmount != 0)
+        {
+            StartCoroutine(Rolling(delta));
+
+            while(playerController.dashTimer < playerController.dashCooldown)
+            {
+                StartCoroutine(playerController.DashCooldown());
+            }
+            
+        }
+    }
+    private IEnumerator Rolling(float delta)
+    {
+        characterController.Move(moveDirection * dashSpeed * delta);
+        yield return new WaitForSecondsRealtime(2);
+    }
+
+
+    private void OnAnimatorMove()
+    {
+        
+
+        
     }
     #endregion
 

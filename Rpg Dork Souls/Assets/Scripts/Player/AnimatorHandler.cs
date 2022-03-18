@@ -5,6 +5,7 @@ using UnityEngine;
 public class AnimatorHandler : MonoBehaviour
 {
     public Animator anim;
+    
     int vertical;
     int horizontal;
     public bool canRotate;
@@ -12,6 +13,7 @@ public class AnimatorHandler : MonoBehaviour
     public void Initialize()
     {
         anim = GetComponent<Animator>();
+     
         vertical = Animator.StringToHash("Vertical");
         horizontal = Animator.StringToHash("Horizontal");        
     }
@@ -74,8 +76,16 @@ public class AnimatorHandler : MonoBehaviour
             h = horizontalMovement;
         }
 
+
         anim.SetFloat(vertical, v, 0.1f, Time.deltaTime);
         anim.SetFloat(horizontal, h, 0.1f, Time.deltaTime);
+    }
+
+    public void PlayTargetAnimation(string targetAnim, bool isInteracting)
+    {
+        anim.applyRootMotion = isInteracting;
+        anim.SetBool("isInteracting", isInteracting);
+        anim.CrossFade(targetAnim, 0.2f);
     }
 
     public void CanRotate()
@@ -86,4 +96,5 @@ public class AnimatorHandler : MonoBehaviour
     {
         canRotate = false;
     }
+
 }

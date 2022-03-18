@@ -1146,11 +1146,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28102231fb22b2a469e681cf67455424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerMovement: {fileID: 0}
+  animatorHandler: {fileID: 0}
   cameraHandler: {fileID: 1836038127}
+  dashCooldown: 0
+  dashTimer: 0
   isInteracting: 0
   isSpriting: 0
   sprintFlag: 0
-  rollFlag: 0
+  dashFlag: 0
+  canDash: 1
 --- !u!114 &1270746108
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1168,6 +1173,10 @@ MonoBehaviour:
   jumpHeight: 15
   rotationSpeed: 10
   gravity: 10.81
+  rollTime: 0.25
+  dashSpeed: 14
+  bodyTransform: {fileID: 180773215}
+  characterController: {fileID: 0}
 --- !u!1 &1283919721 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6880901488789346670, guid: 8b0ed2bc94ddb3b43866e9d4f3f135d9, type: 3}

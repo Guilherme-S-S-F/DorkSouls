@@ -5,15 +5,20 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {    
     InputHandler inputHandler;
-    PlayerMovement playerMovement;    
-    AnimatorHandler animatorHandler;
+    public PlayerMovement playerMovement;    
+    public AnimatorHandler animatorHandler;
     [SerializeField]CameraHandler cameraHandler;
+
+    public float dashCooldown = 2f;
+    [HideInInspector] public float dashTimer = 0f;
 
     [Header("Players Flags")]
     public bool isInteracting;
     public bool isSpriting;
     public bool sprintFlag;
-    public bool rollFlag;
+    public bool dashFlag;
+    public bool canDash;
+
 
     private void Start()
     {
@@ -29,21 +34,26 @@ public class PlayerController : MonoBehaviour
         animatorHandler.Initialize();       
         playerMovement.HandleMovement(delta);
         cameraHandler.HandleCameraRotation();
+        playerMovement.HandleRolling(delta);
 
         isInteracting = animatorHandler.anim.GetBool("isInteracting");
         sprintFlag = false;
-        rollFlag = false;
+        dashFlag = false;
 
         isSpriting = inputHandler.b_input;
         
 
-        animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSpriting);
+        animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSpriting);        
 
         if (animatorHandler.canRotate)
         {
             playerMovement.HandleRotation(delta);
         }
+    }        
+    public IEnumerator DashCooldown()
+    {
+        dashTimer += 1;
+        Debug.Log(dashTimer);
+        yield return new WaitForSeconds(1);
     }
-
-    
 }
