@@ -8,8 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [Range(0.1f, 25f)][SerializeField] float sprintSpeed = 7f;
     [Range(0.1f, 20f)][SerializeField] float jumpHeight = 15f;
     [Range(0.1f, 60f)][SerializeField] float rotationSpeed = 30f;
-    [Range(0.1f, 10.81f)][SerializeField] float gravity = 10.81f;
-    [Range(0.1f, 10f)][SerializeField] float rollTime = 0.25f;
+    [Range(0.1f, 10.81f)][SerializeField] float gravity = 10.81f;    
     [Range(0.1f, 20f)][SerializeField] float dashSpeed = 10f;
 
     public float Gravity { get { return gravity; } set { gravity = value; } }
@@ -105,27 +104,16 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerController.dashFlag && characterController.isGrounded && inputHandler.moveAmount != 0)
         {
-            StartCoroutine(Rolling(delta));
-
-            while(playerController.dashTimer < playerController.dashCooldown)
+            if (!playerController.isDashCooldown)
             {
-                StartCoroutine(playerController.DashCooldown());
-            }
-            
+                characterController.Move(moveDirection * dashSpeed * delta);
+                playerController.isDashCooldown = true;
+                playerController.dashTimer = playerController.dashCooldown;
+            }            
         }
     }
-    private IEnumerator Rolling(float delta)
-    {
-        characterController.Move(moveDirection * dashSpeed * delta);
-        yield return new WaitForSecondsRealtime(2);
-    }
-
-
     private void OnAnimatorMove()
-    {
-        
-
-        
+    {        
     }
     #endregion
 

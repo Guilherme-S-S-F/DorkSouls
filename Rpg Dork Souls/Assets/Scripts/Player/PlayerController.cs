@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     public bool sprintFlag;
     public bool dashFlag;
     public bool canDash;
+    public bool isDashCooldown;
 
 
     private void Start()
@@ -49,11 +50,17 @@ public class PlayerController : MonoBehaviour
         {
             playerMovement.HandleRotation(delta);
         }
+
+        if (isDashCooldown)
+        {
+            dashTimer -= 1 * Time.deltaTime;
+
+            if(dashTimer <= 0)
+            {
+                dashTimer = 0;
+                isDashCooldown = false;
+            }
+        }
     }        
-    public IEnumerator DashCooldown()
-    {
-        dashTimer += 1;
-        Debug.Log(dashTimer);
-        yield return new WaitForSeconds(1);
-    }
+   
 }
