@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
     public bool dashFlag;
     public bool canDash;
     public bool isDashCooldown;
+    public bool heavyAttackFlag;
+    public bool lightAttackFlag;
 
 
     private void Start()
@@ -36,13 +38,13 @@ public class PlayerController : MonoBehaviour
         playerMovement.HandleMovement(delta);
         cameraHandler.HandleCameraRotation();
         playerMovement.HandleRolling(delta);
+        playerMovement.HandleAttack(delta);
 
         isInteracting = animatorHandler.anim.GetBool("isInteracting");
         sprintFlag = false;
         dashFlag = false;
 
         isSpriting = inputHandler.b_input;
-        
 
         animatorHandler.UpdateAnimatorValues(inputHandler.moveAmount, 0, isSpriting);        
 

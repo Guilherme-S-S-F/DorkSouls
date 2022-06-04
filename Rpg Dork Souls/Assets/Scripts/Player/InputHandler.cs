@@ -11,6 +11,8 @@ public class InputHandler : MonoBehaviour
     public float mouseY;
 
     public bool b_input;
+    public bool y_input;
+    public bool x_input;
 
     public float rollInput;
     public float rollInputTimer;
@@ -45,6 +47,8 @@ public class InputHandler : MonoBehaviour
     {
         MoveInput(delta);
         HandleRollInput(delta);
+        HandleHeavyAttack();
+        HandleLightAttack();
     }
 
     private void MoveInput(float delta)
@@ -72,6 +76,32 @@ public class InputHandler : MonoBehaviour
                 playerController.dashFlag = true;
             }
             rollInputTimer = 0;
+        }
+    }
+    private void HandleLightAttack()
+    {
+        y_input = inputActions.PlayerActions.LightAttack.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
+
+        if (y_input)
+        {
+            playerController.lightAttackFlag = true;
+        }
+        else
+        {
+            playerController.lightAttackFlag = false;
+        }
+    }
+    private void HandleHeavyAttack()
+    {
+        x_input = inputActions.PlayerActions.HeavyAttack.phase == UnityEngine.InputSystem.InputActionPhase.Performed;
+
+        if (x_input)
+        {
+            playerController.heavyAttackFlag = true;
+        }
+        else
+        {
+            playerController.heavyAttackFlag = false;
         }
     }
 }

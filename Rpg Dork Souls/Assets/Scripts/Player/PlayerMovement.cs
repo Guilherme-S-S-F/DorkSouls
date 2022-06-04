@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private Weapon weapon;
+    public int damageToDo = 0;
     [Range(0.1f, 15f)][SerializeField] float walkSpeed = 5f;
     [Range(0.1f, 25f)][SerializeField] float sprintSpeed = 7f;
     [Range(0.1f, 20f)][SerializeField] float jumpHeight = 15f;
@@ -66,6 +68,8 @@ public class PlayerMovement : MonoBehaviour
     }
     public void HandleMovement(float delta)
     {
+        if (anim.GetBool("isInteracting"))
+            return;
         if (playerController.dashFlag)
             return;
 
@@ -112,8 +116,39 @@ public class PlayerMovement : MonoBehaviour
             }            
         }
     }
+    
+    private void Attack(int type)
+    {
+        int damage = Random.Range(weapon.attacks[type].attackDamage_min, weapon.attacks[type].attackDamage_max);
+        int criticalPct = Random.Range(0, 100);
+
+        if(criticalPct >0 && criticalPct < 10)
+        {
+            damageToDo = weapon.attacks[type].attackDamage_critical;
+        }
+        else
+        {
+            damageToDo = damage;
+        }
+        
+    }
+    public void HandleAttack(float delta)
+    {
+        if (playerController.lightAttackFlag && !playerController.isInteracting)
+        {
+            playerController.animatorHandler.PlayTargetAnimation("Light Attack", true);
+            Attack(0);
+        }
+
+        if (playerController.heavyAttackFlag && !playerController.isInteracting)
+        {
+            playerController.animatorHandler.PlayTargetAnimation("Heavy Attack", true);
+            Attack(1);
+        }
+    }    
     private void OnAnimatorMove()
-    {        
+    {
+        
     }
     #endregion
 
